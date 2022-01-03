@@ -2,7 +2,12 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import ElementUI from "element-ui";
+import bus from '@/utils/bus'
 
+import "element-ui/lib/theme-chalk/index.css";
+Vue.prototype.$bus = bus
+Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 new Vue({

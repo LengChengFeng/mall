@@ -1,28 +1,66 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+
+const home = () => import("../view/index/home.vue");
+const goodsDetail = () => import("../view/index/detail/goodsDetail.vue")
+
+const category = () => import("../view/category/category.vue");
+const cart = () => import("../view/shopcart/shopcart.vue");
+
+const mine = () => import("../view/mine/mine.vue");
+const register = () => import("../view/mine/user/register");
+const login = () => import("../view/mine/user/login");
+const userInfo = () => import("../view/mine/user/userInfo.vue");
+const updatePwd = () => import("../view/mine/user/updatePwd.vue");
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: "",
+    redirect: "/home",
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/home",
+    component: home,
   },
+  {
+    path: "/mine",
+    component: mine,
+  },
+  {
+    path: "/category",
+    component: category,
+  },
+  {
+    path: "/cart",
+    component: cart,
+  },
+  {
+    path: "/register",
+    component: register,
+  },
+  {
+    path: "/login",
+    component: login,
+  },
+  {
+    path: "/userinfo",
+    component: userInfo,
+  },
+  {
+    path: "/update",
+    component: updatePwd,
+  },
+  {
+    path:"/goods/:id",
+    component: goodsDetail
+  }
 ];
 
 const router = new VueRouter({
   routes,
+  mode: "history",
 });
 
 export default router;

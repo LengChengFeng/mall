@@ -1,32 +1,42 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <router-view></router-view>
+    <main-tab-bar v-show="isActive"></main-tab-bar>
   </div>
 </template>
-
+<script>
+import mainTabBar from "./components/common/tabbar/main.vue";
+export default {
+  name: "App",
+  data() {
+    return {
+      active: "",
+    };
+  },
+  components: {
+    mainTabBar,
+  },
+  computed: {
+    isActive() {
+      const path = this.$route.path;
+      if (
+        path === "/home" ||
+        path === "/category" ||
+        path === "/cart" ||
+        path === "/mine"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  methods: {},
+};
+</script>
 <style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body {
+  background-color: rgba(247,247 ,247);
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+@import url("./assets/css/media");
 </style>

@@ -3,12 +3,15 @@ import localStorage from '@/utils/localStorage'
 const storage = {
     data() {
         return {
-            token: ""
+            token: "",
+            id:""
         }
     },
     mounted() {
         this.$nextTick(() => {
-            this.token = localStorage.getToken('token').token
+            const res = localStorage.getToken('token')
+            this.token = res.token;
+            this.id = res.id;
         })
 
     }

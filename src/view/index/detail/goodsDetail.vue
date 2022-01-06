@@ -1,5 +1,10 @@
 <template>
   <div class="goods-detail">
+    <toast v-show="showToast">
+      <template #title>
+        <span>{{ tips }}</span>
+      </template>
+    </toast>
     <navbar>
       <template #title>商品详情</template>
     </navbar>
@@ -41,12 +46,14 @@
         <img src="~@/assets/icon/girl.png" alt="" />
         <p>客服</p>
       </div>
-      <div class="functions-item">
-        <img src="~@/assets/icon/col.png" alt="" />
-        <p>收藏</p>
+      <div class="functions-item" @click="goCollect">
+        <img src="~@/assets/icon/col-active.png" alt="" v-if="collect" />
+        <img src="~@/assets/icon/col.png" alt="" v-else />
+        <p v-if="collect">已收藏</p>
+        <p v-else>收藏</p>
       </div>
       <div class="go-buy">
-        <div class="buy">立即购买</div>
+        <div class="buy" @click="goBuy">立即购买</div>
       </div>
       <div class="add-cart">
         <div class="cart" @click="addToCart">加入购物车</div>
@@ -57,8 +64,16 @@
 
 <script>
 import navbar from "@/components/common/navbar/navbar";
-import { getGoodsInfo } from "@/network";
 import DetailSwiper from "@/components/common/swiper/detailSwiper.vue";
+import toast from "@/components/common/toast/toast";
+
+import {
+  getGoodsInfo,
+  addToCart,
+  collectGoods,
+  removeCollectGoods,
+} from "@/network";
+import { ShowCollectGoods } from "@/network/collect";
 
 import betterScroll from "@/mixin/betterScroll";
 import backTop from "@/mixin/backTop";
@@ -69,11 +84,12 @@ export default {
   components: {
     navbar,
     DetailSwiper,
+    toast,
   },
   mounted() {
-    DetailSwiper;
     this.id = this.$route.params.id;
     this.getGoodsDetail();
+    this.getCollectGoods();
   },
   data() {
     return {
@@ -81,6 +97,11 @@ export default {
       goodsDetail: "",
       swiperImg: "",
       detailImg: "",
+      showToast: false,
+      tips: "",
+      isCollect: "collect",
+      collect: "",
+      collectGoods: "",
     };
   },
   methods: {
@@ -90,19 +111,65 @@ export default {
       this.swiperImg = this.goodsDetail.goodsImg.slice(0, 3);
       this.detailImg = this.goodsDetail.goodsImg.slice(2);
     },
+    async getCollectGoods() {
+      const res = await ShowCollectGoods();
+      console.log(res);
+      this.collectGoods = res.data;
+
+      //是否已经收藏该商品
+      const id = this.$route.params.id;
+      if (this.collectGoods) {
+        const res = this.collectGoods.some((item) => {
+          return item.collect.goodsId == id;
+        });
+        this.collect = res;
+      }
+    },
     imgLoad() {
       this.$refs.scroll.refresh();
     },
-    addToCart() {
+    //加入购物车
+    async addToCart() {
       if (!this.token) {
-        // alert("请先登录~");
         this.$message({
           type: "info",
           message: "先请登录~",
         });
         this.$router.push("/login");
       } else {
-        alert("登录成功~");
+        await addToCart({ goodsId: this.goodsDetail.Id });
+        this.tips = "加入购物车成功~";
+        this.showToast = true;
+        setTimeout(() => {
+          this.showToast = false;
+        }, 1500);
+      }
+    },
+    //购买
+    goBuy() {
+      this.tips = "购买成功";
+      this.showToast = true;
+      setTimeout(() => {
+        this.showToast = false;
+      }, 1500);
+    },
+    //收藏
+    async goCollect() {
+      const id = this.$route.params.id;
+      if (this.isCollect === "collect") {
+        const res = await collectGoods({
+          goodsId: id,
+          type: this.isCollect,
+        });
+        this.collect = res.data;
+        this.isCollect = "remove";
+      } else if (this.isCollect === "remove") {
+         await removeCollectGoods({
+          goodsId: id,
+          type: this.isCollect,
+        });
+        this.collect = "";
+        this.isCollect = "collect";
       }
     },
   },
@@ -126,7 +193,6 @@ export default {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
     .goods-price {
       display: flex;
-      //   text-align: center;
       align-content: center;
       .now-price {
         font-size: 0.7rem;
@@ -171,7 +237,7 @@ export default {
     display: flex;
     position: fixed;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-    color: #ccc;
+    // color: black;
     width: 15rem;
     bottom: 0;
     left: 50%;

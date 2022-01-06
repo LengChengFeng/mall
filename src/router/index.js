@@ -12,6 +12,7 @@ const register = () => import("../view/mine/user/register");
 const login = () => import("../view/mine/user/login");
 const userInfo = () => import("../view/mine/user/userInfo.vue");
 const updatePwd = () => import("../view/mine/user/updatePwd.vue");
+const collect = ()=> import ("../view/mine/user/collect.vue")
 
 Vue.use(VueRouter);
 
@@ -55,6 +56,11 @@ const routes = [
   {
     path:"/goods/:id",
     component: goodsDetail
+  },
+  {
+    path:"/collect",
+    component: collect,
+    name:'/collect'
   }
 ];
 

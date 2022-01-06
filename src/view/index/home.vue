@@ -104,6 +104,7 @@ import iconSwiper from "@/view/mine/user/homeIconSwiper";
 import { getAllGoods } from "@/network";
 export default {
   mixins: [backTop, betterScroll],
+  name: "home",
   components: {
     homeSwiper,
     iconSwiper,
@@ -117,6 +118,7 @@ export default {
     this.$bus.$on("imgLoad", () => {
       if (this.$refs.scroll) {
         this.$refs.scroll.refresh();
+        this.$refs.scroll.scrollTo(0, -this.positionY, 0);
       }
     });
   },
@@ -166,6 +168,18 @@ export default {
         this.getAllGoods();
       }
     },
+  },
+  activated() {
+    this.$nextTick(() => {
+      console.log("chufa");
+      if (this.positionY > 200) {
+        console.log(this.positionY);
+        this.$refs.scroll.scrollTo(0, -this.positionY, 0);
+      }
+    });
+  },
+  deactivated() {
+    console.log(this.positionY);
   },
 };
 </script>

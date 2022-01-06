@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive include="home">
+      <router-view></router-view>
+    </keep-alive>
     <main-tab-bar v-show="isActive"></main-tab-bar>
   </div>
 </template>
@@ -36,7 +38,7 @@ export default {
 </script>
 <style lang="less">
 body {
-  background-color: rgba(247,247 ,247);
+  background-color: rgba(247, 247, 247);
 }
 @import url("./assets/css/media");
 </style>

@@ -55,8 +55,8 @@
           <span>0</span>
           <p>优惠券</p>
         </div>
-        <div class="collect">
-          <span>0</span>
+        <div class="collect" @click="collectDetail">
+          <span v-if="userInfo">{{userInfo.collect.length}}</span>
           <p>收藏</p>
         </div>
         <div class="step">
@@ -340,6 +340,10 @@ export default {
       }
       this.$router.push("/update");
     },
+    //去收藏
+    collectDetail() {
+      this.$router.push('/collect')
+    }
   },
 };
 </script>
@@ -402,6 +406,7 @@ export default {
       display: flex;
       text-align: center;
       margin-top: 10px;
+      cursor: pointer;
       .card,
       .collect,
       .step,

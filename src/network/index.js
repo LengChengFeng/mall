@@ -17,6 +17,7 @@ service.interceptors.request.use((config) => {
 
 
 
+
 //注册
 export function register(data) {
     return service({
@@ -117,3 +118,57 @@ export function getGoodsInfo(data) {
         method: "GET",
     });
 }
+
+//加入购物车
+export function addToCart(data) {
+    return service({
+        url: baseURL + '/shopCart',
+        method: "POST",
+        data
+    });
+}
+
+
+//获取购物车的信息
+export function showShopCart(data) {
+    return service({
+        url: baseURL + '/shopCart',
+        method: "GET",
+        data
+    });
+}
+
+//修改购物车数量
+export function ShopCartChangeNumber(data) {
+    return service({
+        url: baseURL + '/shopCart',
+        method: "PATCH",
+        data
+    });
+}
+//删除购物车
+export function DelShopCartGoods(data) {
+    return service({
+        url: baseURL + '/shopCart',
+        method: "DELETE",
+        data
+    });
+}
+
+export function collectGoods(data) {
+    return service({
+        url: baseURL + '/goodsCollect',
+        method: "POST",
+        data
+    });
+}
+
+export function removeCollectGoods(data) {
+    return service({
+        url: baseURL + '/goodsCollect',
+        method: "POST",
+        data
+    });
+}
+
+export {service,baseURL}

@@ -245,7 +245,7 @@ export default {
           message: result.data.message,
         });
       }
-              Vue.set(this.userInfo,'username',this.userInfo.username);
+    Vue.set(this.userInfo,'username',this.userInfo.username);
     },
     //修改性别
     changeSex() {
